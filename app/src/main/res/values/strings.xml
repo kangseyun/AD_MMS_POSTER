@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">admmsPost</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_menu">MenuActivity</string>
+    <string name="title_activity_user_control">UserControlActivity</string>
+    <string name="title_activity_user_insert">UserInsertActivity</string>
+    <string name="title_activity_admin_insert">AdminInsertActivity</string>
+    <string name="title_activity_adset">ADSetActivity</string>
 </resources>

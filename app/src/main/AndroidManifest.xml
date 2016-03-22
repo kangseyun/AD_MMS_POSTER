@@ -18,6 +18,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Activity.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.MenuActivity"
+            android:label="@string/title_activity_menu"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.UserControlActivity"
+            android:label="@string/title_activity_user_control"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.UserInsertActivity"
+            android:label="@string/title_activity_user_insert"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.AdminInsertActivity"
+            android:label="@string/title_activity_admin_insert"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.ADSetActivity"
+            android:label="@string/title_activity_adset"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
