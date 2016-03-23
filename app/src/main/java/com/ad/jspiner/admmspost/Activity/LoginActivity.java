@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.ad.jspiner.admmspost.Models.retrofit;
+import com.ad.jspiner.admmspost.Models.LoginModel;
 import com.ad.jspiner.admmspost.R;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -18,31 +18,31 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONObject;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.http.GET;
-import retrofit2.http.Path;
+
 
 public class LoginActivity extends Activity {
     public static final String TAG = LoginActivity.class.getSimpleName();
-    public static final String API_URL = "http://qwebmomo.cafe24.com/api/login_admin";
+    public static final String API_URL = "http://qwebmomo.cafe24.com/api/login_admin.php";
 
     public static final String KEY_USERNAME="id";
     public static final String KEY_PASSWORD="pw";
 
+    private LoginModel loginModel = new LoginModel();
     private String username;
     private String password;
 
     @Bind(R.id.ButtonLogin) Button login;
     @Bind(R.id.loginid) EditText id;
     @Bind(R.id.loginpassword) EditText pw;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,10 +64,21 @@ public class LoginActivity extends Activity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        if(response.trim().equals("success")){
-                            openProfile();
-                        }else{
-                            Toast.makeText(LoginActivity.this,response, Toast.LENGTH_LONG).show();
+                        try {
+                            JSONObject result = new JSONObject(response);
+
+                            loginModel.set_logined(result.getInt("code"));
+                            loginModel.set_admin(result.getInt("is_master"));
+                            Log.i(TAG,"" + result.getInt("is_master"));
+
+                        }
+                        catch (Exception e){}
+
+                        if(loginModel.get_logined() == 1){
+                            loginComplete();
+                        }
+                        else{
+
                         }
                     }
                 },
@@ -90,9 +101,11 @@ public class LoginActivity extends Activity {
         requestQueue.add(stringRequest);
 
     }
-    private void openProfile(){
+
+    private void loginComplete(){
         Intent intent = new Intent(this, MenuActivity.class);
         startActivity(intent);
+        finish();
     }
 
 

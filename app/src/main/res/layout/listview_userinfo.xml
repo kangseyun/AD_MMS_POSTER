@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="80dp"
     android:background="#9E9E9E"
-    android:layout_margin="10dp"
     >
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,9 +16,11 @@
             android:layout_weight="5"
             >
             <TextView
+                android:id="@+id/listview_user_number"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
+                android:textColor="#424242"
                 android:text="1"
                 android:textSize="35dp"
                 />
@@ -34,16 +35,20 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1">
                 <TextView
+                    android:id="@+id/listview_user_name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:textColor="#424242"
                     android:text="홍길동"/>
                 <TextView
+                    android:id="@+id/listview_user_date"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:textColor="#424242"
                     android:text="2016/01/02"/>
             </LinearLayout>
             <LinearLayout
@@ -51,9 +56,11 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1">
                 <TextView
+                    android:id="@+id/listview_user_phone"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
+                    android:textColor="#424242"
                     android:textSize="27dp"
                     android:text="010-1234-5670"/>
             </LinearLayout>

@@ -18,9 +18,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="5dp"
         android:layout_weight="1">
         <ListView
             android:id="@+id/userList"
+            android:dividerHeight="3sp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

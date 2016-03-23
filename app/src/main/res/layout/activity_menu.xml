@@ -20,7 +20,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <Button
-            android:id="@+id/userMn"
+            android:id="@+id/btn_menu_uesr"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="회원 관리"
@@ -29,14 +29,23 @@
             android:textColor="#fff"
             android:background="#587997"/>
         <Button
-            android:id="@+id/adminMn"
+            android:id="@+id/btn_menu_admin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="관리자 관리"
             android:textStyle="bold"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
+            android:layout_margin="30dp"
             android:textColor="#fff"
             android:background="#1099DD"/>
+
+        <Button
+            android:id="@+id/logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="로그아웃"
+            android:textStyle="bold"
+            android:layout_margin="30dp"
+            android:textColor="#fff"
+            android:background="#F06292"/>
     </LinearLayout>
 </LinearLayout>
