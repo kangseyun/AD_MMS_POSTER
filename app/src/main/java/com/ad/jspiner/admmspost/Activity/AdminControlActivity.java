@@ -13,9 +13,11 @@ import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ad.jspiner.admmspost.Adapter.MenuAdapter;
+import com.ad.jspiner.admmspost.Models.LoginModel;
 import com.ad.jspiner.admmspost.Models.MenuModel;
 import com.ad.jspiner.admmspost.R;
 import com.android.volley.AuthFailureError;
@@ -28,6 +30,7 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,8 +45,8 @@ public class AdminControlActivity extends Activity {
     public static final String API_URL2 = "http://qwebmomo.cafe24.com/api/set_adminable.php";
 
     public static final String KEY_PHONE="user_no";
-
-
+    public LoginModel loginmodel;
+    public static String no;
     private MenuAdapter mAdapter = null;
     @Bind(R.id.adminList) ListView list;
     @Override
@@ -60,15 +63,16 @@ public class AdminControlActivity extends Activity {
         list.setOnItemClickListener(itemClickListener);
     }
     private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener(){
-
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            no = ((TextView) view.findViewById(R.id.listview_user_number)).getText().toString();
+            Log.i("get",no);
             AlertDialog.Builder alert_confirm = new AlertDialog.Builder(AdminControlActivity.this);
             alert_confirm.setMessage("유저를 비활성화 하시겠습니까?").setCancelable(false).setPositiveButton("확인",
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            // 'YES'
+                            load2();
                         }
                     }).setNegativeButton("취소",
                     new DialogInterface.OnClickListener() {
@@ -113,13 +117,13 @@ public class AdminControlActivity extends Activity {
     }
 
     void load2(){
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, API_URL,
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, API_URL2,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            JSONArray result = new JSONObject(response).getJSONArray("adminlist");
-
+                            Log.i(TAG,response);
                         }
                         catch (Exception e){}
 
@@ -131,6 +135,12 @@ public class AdminControlActivity extends Activity {
                         Toast.makeText(AdminControlActivity.this, error.toString(), Toast.LENGTH_LONG).show();
                     }
                 }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<String,String>();
+                map.put("admin_no",no);
+                return map;
+            }
         };
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
