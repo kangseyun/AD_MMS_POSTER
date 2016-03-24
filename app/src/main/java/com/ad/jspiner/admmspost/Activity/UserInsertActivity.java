@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.ad.jspiner.admmspost.MainActivity;
+import com.ad.jspiner.admmspost.Models.LoginModel;
 import com.ad.jspiner.admmspost.R;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -38,6 +39,9 @@ public class UserInsertActivity extends AppCompatActivity {
 
     public static final String KEY_PHONE="id";
     public static final String KEY_NAME="name";
+    public static final String KEY_admin="admin_no";
+
+    public LoginModel loginmodel;
 
     @Bind(R.id.user_insert_phone) EditText phone;
     @Bind(R.id.user_insert_name) EditText name;
@@ -88,6 +92,7 @@ public class UserInsertActivity extends AppCompatActivity {
                 Map<String,String> map = new HashMap<String,String>();
                 map.put(KEY_PHONE,phones);
                 map.put(KEY_NAME,names);
+                map.put(KEY_admin,""+loginmodel.no);
                 return map;
             }
         };

@@ -8,11 +8,13 @@ public class MenuModel {
     public String name;
     public String date;
     public String phone;
+    public String is_active;
 
-    public MenuModel(String number,String name,String date,String phone){
+    public MenuModel(String number,String name,String date,String phone, String is_active){
         this.number = number;
         this.name = name;
         this.date = date;
         this.phone = phone;
+        this.is_active = is_active;
     }
 }

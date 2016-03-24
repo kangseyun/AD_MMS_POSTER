@@ -19,7 +19,7 @@ public class MenuActivity extends AppCompatActivity {
     @Bind(R.id.logout) Button logout;
     @Bind(R.id.btn_menu_admin) Button btn_admin;
 
-    public LoginModel loginModel = new LoginModel();
+    public static LoginModel loginModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +32,7 @@ public class MenuActivity extends AppCompatActivity {
     void init(){
         ButterKnife.bind(this);
 
-        if(loginModel.get_admin() == 0){
+        if(loginModel.is_master == 0){
             btn_admin.setVisibility(View.GONE);
         }
     }
@@ -40,6 +40,12 @@ public class MenuActivity extends AppCompatActivity {
     @OnClick(R.id.btn_menu_uesr)
     void UserButtonClick(){
         Intent i = new Intent(MenuActivity.this, UserControlActivity.class);
+        startActivity(i);
+    }
+
+    @OnClick(R.id.btn_menu_admin)
+    void AdminButtonClick(){
+        Intent i = new Intent(MenuActivity.this, AdminControlActivity.class);
         startActivity(i);
     }
 

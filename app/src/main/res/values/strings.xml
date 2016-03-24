@@ -7,4 +7,7 @@
     <string name="title_activity_user_insert">UserInsertActivity</string>
     <string name="title_activity_admin_insert">AdminInsertActivity</string>
     <string name="title_activity_adset">ADSetActivity</string>
+    <string name="title_activity_admin_control">AdminControlActivity</string>
+
+    <string name="hello_world">Hello world!</string>
 </resources>

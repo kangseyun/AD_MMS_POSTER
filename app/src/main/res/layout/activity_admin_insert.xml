@@ -28,6 +28,7 @@
             android:text="추가할 유저정보를 \n입력해주세요"
             android:textSize="30dp"/>
         <EditText
+            android:id="@+id/admin_insert_phone"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
@@ -35,6 +36,7 @@
             android:layout_height="wrap_content"
             android:hint="Phone"/>
         <EditText
+            android:id="@+id/admin_insert_name"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
@@ -42,14 +44,17 @@
             android:layout_height="wrap_content"
             android:hint="Name"/>
         <EditText
+            android:id="@+id/admin_insert_pass"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:password="true"
             android:hint="PASS"/>
 
         <Button
+            android:id="@+id/btn_admim_insert"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="추가"

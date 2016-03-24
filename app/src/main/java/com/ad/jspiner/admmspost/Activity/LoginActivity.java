@@ -35,7 +35,7 @@ public class LoginActivity extends Activity {
     public static final String KEY_USERNAME="id";
     public static final String KEY_PASSWORD="pw";
 
-    private LoginModel loginModel = new LoginModel();
+    public LoginModel loginmodel;
     private String username;
     private String password;
 
@@ -67,14 +67,15 @@ public class LoginActivity extends Activity {
                         try {
                             JSONObject result = new JSONObject(response);
 
-                            loginModel.set_logined(result.getInt("code"));
-                            loginModel.set_admin(result.getInt("is_master"));
-                            Log.i(TAG,"" + result.getInt("is_master"));
+                            loginmodel.logined = result.getInt("code");
+                            loginmodel.is_master =  result.getInt("is_master");
+                            loginmodel.no = result.getInt("no");
+                            Log.i(TAG,""+ loginmodel.no);
 
                         }
                         catch (Exception e){}
 
-                        if(loginModel.get_logined() == 1){
+                        if(loginmodel.logined == 1){
                             loginComplete();
                         }
                         else{

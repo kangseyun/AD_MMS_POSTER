@@ -1,6 +1,7 @@
 package com.ad.jspiner.admmspost.Adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,6 +57,10 @@ public class MenuAdapter extends BaseAdapter {
         TextView number = (TextView)convertView.findViewById(R.id.listview_user_number);
         TextView name = (TextView)convertView.findViewById(R.id.listview_user_name);
         TextView date = (TextView)convertView.findViewById(R.id.listview_user_date);
+        int is_active = Integer.parseInt( m_list.get(position).is_active);
+        if( is_active == 1){
+            name.setTextColor(Color.parseColor("#f06292"));
+        }
 
         number.setText(m_list.get(position).number);
         phone.setText(m_list.get(position).phone);
