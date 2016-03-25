@@ -72,10 +72,11 @@ public class UserInsertActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            JSONObject result = new JSONObject(response);
-
-                            Log.i(TAG, "" + result);
-
+                            JSONObject obj = new JSONObject(response);
+                            String code = obj.getString("code");
+                            if(code.equals("1")){
+                                Toast.makeText(UserInsertActivity.this, "Complete", Toast.LENGTH_LONG).show();
+                            }
                         }
                         catch (Exception e){}
 

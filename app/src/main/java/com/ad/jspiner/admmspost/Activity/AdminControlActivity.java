@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -40,9 +41,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AdminControlActivity extends Activity {
+    public int nowPage = 1;
     public static final String TAG = AdminControlActivity.class.getSimpleName();
-    public static final String API_URL = "http://qwebmomo.cafe24.com/api/load_adminlist.php?page=1";
     public static final String API_URL2 = "http://qwebmomo.cafe24.com/api/set_adminable.php";
+
 
     public static final String KEY_PHONE="user_no";
     public LoginModel loginmodel;
@@ -54,14 +56,31 @@ public class AdminControlActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_control);
         init();
-        road();
+        road(nowPage);
     }
     void init(){
         ButterKnife.bind(this);
         mAdapter = new MenuAdapter(getApplicationContext());
         list.setAdapter(mAdapter);
         list.setOnItemClickListener(itemClickListener);
+        list.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                    if((firstVisibleItem + visibleItemCount) == totalItemCount){
+
+                        Log.i(TAG,""+nowPage);
+                        road(nowPage);
+                    }
+            }
+        });
     }
+
+
     private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener(){
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -72,7 +91,9 @@ public class AdminControlActivity extends Activity {
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            mAdapter.dataclear();
                             load2();
+
                         }
                     }).setNegativeButton("취소",
                     new DialogInterface.OnClickListener() {
@@ -86,8 +107,8 @@ public class AdminControlActivity extends Activity {
             alert.show();
         }
     };
-    void road(){
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, API_URL,
+    void road(int page){
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, String.format("http://qwebmomo.cafe24.com/api/load_adminlist.php?page=%d",page),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -97,6 +118,7 @@ public class AdminControlActivity extends Activity {
                                 JSONObject obj = result.getJSONObject(i);
                                 mAdapter.Additem(new MenuModel(obj.getString("no"), obj.getString("name"), obj.getString("signdate"), obj.getString("id"), obj.getString("is_active")));
                                         Log.i(TAG, obj.toString());
+                                mAdapter.notifyDataSetChanged();
                             }
 
                         }
@@ -117,13 +139,12 @@ public class AdminControlActivity extends Activity {
     }
 
     void load2(){
-
         StringRequest stringRequest = new StringRequest(Request.Method.POST, API_URL2,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            Log.i(TAG,response);
+                            road(nowPage);
                         }
                         catch (Exception e){}
 

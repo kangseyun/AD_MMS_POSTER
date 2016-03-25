@@ -80,6 +80,7 @@ public class UserControlActivity extends AppCompatActivity {
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            mAdapter.dataclear();
                             load2();
                         }
                     }).setNegativeButton("취소",
@@ -105,6 +106,7 @@ public class UserControlActivity extends AppCompatActivity {
                                 JSONObject obj = result.getJSONObject(i);
                                 mAdapter.Additem(new MenuModel(obj.getString("no"), obj.getString("name"), obj.getString("signdate"), obj.getString("id"),  obj.getString("is_active")));
                                 Log.i(TAG, obj.toString());
+                                mAdapter.notifyDataSetChanged();
                             }
 
                         }
@@ -130,6 +132,7 @@ public class UserControlActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         try {
+                            load();
                             Log.i(TAG,response);
                         }
                         catch (Exception e){}

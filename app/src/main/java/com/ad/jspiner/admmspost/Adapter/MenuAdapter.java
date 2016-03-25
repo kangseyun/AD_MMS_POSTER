@@ -23,6 +23,9 @@ public class MenuAdapter extends BaseAdapter {
     private ArrayList<MenuModel> m_list;
     public Context mContext;
 
+    public void dataclear(){
+        m_list.clear();
+    }
     public MenuAdapter(Context mContext){
         this.mContext = mContext;
         m_list = new ArrayList<MenuModel>();

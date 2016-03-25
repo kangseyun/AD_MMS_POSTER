@@ -70,9 +70,12 @@ public class AdminInsertActivity extends Activity {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            JSONObject result = new JSONObject(response);
+                            JSONObject obj = new JSONObject(response);
+                            String code = obj.getString("code");
+                            if(code.equals("1")){
+                                Toast.makeText(AdminInsertActivity.this, "Complete", Toast.LENGTH_LONG).show();
+                            }
 
-                            Log.i(TAG, "" + result);
 
                         }
                         catch (Exception e){}
