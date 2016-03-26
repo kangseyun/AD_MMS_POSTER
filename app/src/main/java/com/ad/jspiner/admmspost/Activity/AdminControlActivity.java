@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.Adapter;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,12 +46,14 @@ public class AdminControlActivity extends Activity {
     public static final String TAG = AdminControlActivity.class.getSimpleName();
     public static final String API_URL2 = "http://qwebmomo.cafe24.com/api/set_adminable.php";
 
-
-    public static final String KEY_PHONE="user_no";
     public LoginModel loginmodel;
     public static String no;
+
     private MenuAdapter mAdapter = null;
+
     @Bind(R.id.adminList) ListView list;
+    @Bind(R.id.admin_control_btn_load) Button btn_load;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,21 +66,6 @@ public class AdminControlActivity extends Activity {
         mAdapter = new MenuAdapter(getApplicationContext());
         list.setAdapter(mAdapter);
         list.setOnItemClickListener(itemClickListener);
-        list.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                    if((firstVisibleItem + visibleItemCount) == totalItemCount){
-
-                        Log.i(TAG,""+nowPage);
-                        road(nowPage);
-                    }
-            }
-        });
     }
 
 
@@ -87,13 +75,13 @@ public class AdminControlActivity extends Activity {
             no = ((TextView) view.findViewById(R.id.listview_user_number)).getText().toString();
             Log.i("get",no);
             AlertDialog.Builder alert_confirm = new AlertDialog.Builder(AdminControlActivity.this);
-            alert_confirm.setMessage("유저를 비활성화 하시겠습니까?").setCancelable(false).setPositiveButton("확인",
+            alert_confirm.setMessage("유저를 활서화/비활성화 하시겠습니까?").setCancelable(false).setPositiveButton("확인",
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             mAdapter.dataclear();
                             load2();
-
+                            // 리스트 클리어 - > 업데이트 리스트 목록 불러오기 -> 리스트 리플레쉬
                         }
                     }).setNegativeButton("취소",
                     new DialogInterface.OnClickListener() {
@@ -107,6 +95,7 @@ public class AdminControlActivity extends Activity {
             alert.show();
         }
     };
+
     void road(int page){
         StringRequest stringRequest = new StringRequest(Request.Method.GET, String.format("http://qwebmomo.cafe24.com/api/load_adminlist.php?page=%d",page),
                 new Response.Listener<String>() {
@@ -117,10 +106,9 @@ public class AdminControlActivity extends Activity {
                             for(int i=0; i<result.length();i++){
                                 JSONObject obj = result.getJSONObject(i);
                                 mAdapter.Additem(new MenuModel(obj.getString("no"), obj.getString("name"), obj.getString("signdate"), obj.getString("id"), obj.getString("is_active")));
-                                        Log.i(TAG, obj.toString());
+                                Log.i(TAG, obj.toString());
                                 mAdapter.notifyDataSetChanged();
                             }
-
                         }
                         catch (Exception e){}
 
@@ -163,7 +151,6 @@ public class AdminControlActivity extends Activity {
                 return map;
             }
         };
-
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
@@ -172,5 +159,10 @@ public class AdminControlActivity extends Activity {
     void admin_control_btn(){
         Intent i = new Intent(AdminControlActivity.this, AdminInsertActivity.class);
         startActivity(i);
+    }
+    @OnClick(R.id.admin_control_btn_load)
+    void admin_control_btn_load(){ // net page load
+        nowPage = nowPage + 1;
+        road(nowPage);
     }
 }

@@ -39,10 +39,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class UserControlActivity extends AppCompatActivity {
+    public int nowPage = 1;
     public static final String TAG = UserInsertActivity.class.getSimpleName();
     public static LoginModel loginmodel;
 
-    public static final String API_URL = String.format( "http://qwebmomo.cafe24.com/api/load_userlist.php?admin_no=%d&page=1", loginmodel.no);
 
     public static final String API_URL2 = "http://qwebmomo.cafe24.com/api/set_userable.php";
 
@@ -59,7 +59,7 @@ public class UserControlActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_control);
         Log.i("no",""+loginmodel.no);
         init();
-        load();
+        load(nowPage);
     }
     void init(){
         ButterKnife.bind(this);
@@ -95,8 +95,8 @@ public class UserControlActivity extends AppCompatActivity {
             alert.show();
         }
     };
-    void load(){
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, API_URL,
+    void load(int page){
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,  String.format( "http://qwebmomo.cafe24.com/api/load_userlist.php?admin_no=%d&page=%d", loginmodel.no, page),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -104,8 +104,8 @@ public class UserControlActivity extends AppCompatActivity {
                             JSONArray result = new JSONObject(response).getJSONArray("userlist");
                             for(int i=0; i<result.length();i++){
                                 JSONObject obj = result.getJSONObject(i);
-                                mAdapter.Additem(new MenuModel(obj.getString("no"), obj.getString("name"), obj.getString("signdate"), obj.getString("id"),  obj.getString("is_active")));
                                 Log.i(TAG, obj.toString());
+                                mAdapter.Additem(new MenuModel(obj.getString("no"), obj.getString("name"), obj.getString("signdate"), obj.getString("id"), obj.getString("is_active")));
                                 mAdapter.notifyDataSetChanged();
                             }
 
@@ -132,7 +132,7 @@ public class UserControlActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            load();
+                            load(nowPage);
                             Log.i(TAG,response);
                         }
                         catch (Exception e){}
@@ -160,6 +160,11 @@ public class UserControlActivity extends AppCompatActivity {
     void user_control_btn(){
         Intent i = new Intent(UserControlActivity.this, UserInsertActivity.class);
         startActivity(i);
+    }
+    @OnClick(R.id.user_control_btn_load)
+    void user_control_btn_load(){
+        nowPage= nowPage + 1;
+        load(nowPage);
     }
 
 }

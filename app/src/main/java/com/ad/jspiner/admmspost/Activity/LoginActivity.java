@@ -59,6 +59,8 @@ public class LoginActivity extends Activity {
     void ButtonClick(){
          username = id.getText().toString().trim();
          password = pw.getText().toString().trim();
+        // Login Request
+        // 이거 클래스화 시켜야하는데 일단 이렇게 해놓고 나중에 리팩토링할때 클래스 화 할게 그럼 코드 깔끔해질거야
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, API_URL,
                 new Response.Listener<String>() {
