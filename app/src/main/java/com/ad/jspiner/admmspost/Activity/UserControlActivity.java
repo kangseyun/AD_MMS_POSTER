@@ -67,6 +67,7 @@ public class UserControlActivity extends AppCompatActivity {
         mAdapter = new MenuAdapter(getApplicationContext());
         list.setAdapter(mAdapter);
         list.setOnItemClickListener(itemClickListener);
+        mAdapter.notifyDataSetChanged();
 
 
     }

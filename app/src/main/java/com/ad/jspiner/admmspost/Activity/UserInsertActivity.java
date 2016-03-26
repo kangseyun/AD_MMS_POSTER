@@ -75,7 +75,8 @@ public class UserInsertActivity extends AppCompatActivity {
                             JSONObject obj = new JSONObject(response);
                             String code = obj.getString("code");
                             if(code.equals("1")){
-                                Toast.makeText(UserInsertActivity.this, "Complete", Toast.LENGTH_LONG).show();
+                                Intent i = new Intent(UserInsertActivity.this,UserControlActivity.class);
+                                startActivity(i);
                             }
                         }
                         catch (Exception e){}

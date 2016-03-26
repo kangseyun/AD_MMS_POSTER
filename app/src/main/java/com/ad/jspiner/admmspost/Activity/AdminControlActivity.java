@@ -163,6 +163,7 @@ public class AdminControlActivity extends Activity {
     @OnClick(R.id.admin_control_btn_load)
     void admin_control_btn_load(){ // net page load
         nowPage = nowPage + 1;
+        Log.i(TAG, ""+nowPage);
         road(nowPage);
     }
 }

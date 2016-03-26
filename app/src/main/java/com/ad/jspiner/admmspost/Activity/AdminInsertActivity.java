@@ -1,6 +1,7 @@
 package com.ad.jspiner.admmspost.Activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -73,7 +74,8 @@ public class AdminInsertActivity extends Activity {
                             JSONObject obj = new JSONObject(response);
                             String code = obj.getString("code");
                             if(code.equals("1")){
-                                Toast.makeText(AdminInsertActivity.this, "Complete", Toast.LENGTH_LONG).show();
+                                Intent i = new Intent(AdminInsertActivity.this,AdminControlActivity.class);
+                                startActivity(i);
                             }
 
 
