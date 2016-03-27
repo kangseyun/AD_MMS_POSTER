@@ -42,7 +42,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AdminControlActivity extends Activity {
-    public int nowPage = 1;
+    public static int nowPage = 1;
     public static final String TAG = AdminControlActivity.class.getSimpleName();
     public static final String API_URL2 = "http://qwebmomo.cafe24.com/api/set_adminable.php";
 
