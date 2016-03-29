@@ -133,6 +133,7 @@ public class UserControlActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         try {
+                            nowPage = 1;
                             load(nowPage);
                             Log.i(TAG,response);
                         }
@@ -161,6 +162,7 @@ public class UserControlActivity extends AppCompatActivity {
     void user_control_btn(){
         Intent i = new Intent(UserControlActivity.this, UserInsertActivity.class);
         startActivity(i);
+        finish();
     }
     @OnClick(R.id.user_control_btn_load)
     void user_control_btn_load(){

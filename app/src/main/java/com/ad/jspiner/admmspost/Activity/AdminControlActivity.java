@@ -41,8 +41,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class AdminControlActivity extends Activity {
-    public static int nowPage = 1;
+public class AdminControlActivity extends Activity implements AbsListView.OnScrollListener {
+    public boolean rock = true;
+    public int nowPage = 1;
+    public int check = 0;
     public static final String TAG = AdminControlActivity.class.getSimpleName();
     public static final String API_URL2 = "http://qwebmomo.cafe24.com/api/set_adminable.php";
 
@@ -52,22 +54,37 @@ public class AdminControlActivity extends Activity {
     private MenuAdapter mAdapter = null;
 
     @Bind(R.id.adminList) ListView list;
-    @Bind(R.id.admin_control_btn_load) Button btn_load;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_control);
         init();
-        road(nowPage);
+        road(1);
     }
     void init(){
         ButterKnife.bind(this);
         mAdapter = new MenuAdapter(getApplicationContext());
         list.setAdapter(mAdapter);
         list.setOnItemClickListener(itemClickListener);
+
+        list.setOnScrollListener(this);
+    }
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+
     }
 
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if(rock == false){
+            if((firstVisibleItem + visibleItemCount) == totalItemCount){
+                rock = true;
+                road(nowPage);
+            }
+        }
+    }
 
     private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener(){
         @Override
@@ -102,13 +119,26 @@ public class AdminControlActivity extends Activity {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            JSONArray result = new JSONObject(response).getJSONArray("adminlist");
-                            for(int i=0; i<result.length();i++){
-                                JSONObject obj = result.getJSONObject(i);
-                                mAdapter.Additem(new MenuModel(obj.getString("no"), obj.getString("name"), obj.getString("signdate"), obj.getString("id"), obj.getString("is_active")));
-                                Log.i(TAG, obj.toString());
+                            nowPage = nowPage + 1;
+                            JSONObject totalpage = new JSONObject(response);
+                            int Count = totalpage.getInt("lastpage");
+                            if(nowPage < Count){
+
+                                Log.i("nowPage", "" + nowPage);
+                                JSONArray result = new JSONObject(response).getJSONArray("adminlist");
+                                int len = result.length();
+
+                                for(int i=0; i<len;i++){
+                                    JSONObject obj = result.getJSONObject(i);
+                                    mAdapter.Additem(new MenuModel(obj.getString("no"), obj.getString("name"), obj.getString("signdate"), obj.getString("id"), obj.getString("is_active")));
+
+
+                                }
                                 mAdapter.notifyDataSetChanged();
+                                rock = false;
                             }
+
+
                         }
                         catch (Exception e){}
 
@@ -132,6 +162,7 @@ public class AdminControlActivity extends Activity {
                     @Override
                     public void onResponse(String response) {
                         try {
+                            nowPage = 1;
                             road(nowPage);
                         }
                         catch (Exception e){}
@@ -159,11 +190,10 @@ public class AdminControlActivity extends Activity {
     void admin_control_btn(){
         Intent i = new Intent(AdminControlActivity.this, AdminInsertActivity.class);
         startActivity(i);
+        finish();
     }
-    @OnClick(R.id.admin_control_btn_load)
-    void admin_control_btn_load(){ // net page load
-        nowPage = nowPage + 1;
-        Log.i(TAG, ""+nowPage);
-        road(nowPage);
-    }
+
+
+
+
 }

@@ -35,16 +35,6 @@
         android:layout_weight="4"
         >
         <Button
-            android:id="@+id/admin_control_btn_load"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#587997"
-            android:layout_margin="10dp"
-            android:textColor="#fff"
-            android:textSize="20dp"
-            android:text="불러오기"/>
-        <Button
             android:id="@+id/admin_control_btn"
             android:layout_weight="1"
             android:layout_width="match_parent"

@@ -77,6 +77,10 @@ public class UserInsertActivity extends AppCompatActivity {
                             if(code.equals("1")){
                                 Intent i = new Intent(UserInsertActivity.this,UserControlActivity.class);
                                 startActivity(i);
+                                finish();
+                            }
+                            else {
+                                Toast.makeText(UserInsertActivity.this, "Insert Fail", Toast.LENGTH_LONG).show();
                             }
                         }
                         catch (Exception e){}

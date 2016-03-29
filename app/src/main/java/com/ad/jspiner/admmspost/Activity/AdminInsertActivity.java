@@ -76,8 +76,12 @@ public class AdminInsertActivity extends Activity {
                             if(code.equals("1")){
                                 Intent i = new Intent(AdminInsertActivity.this,AdminControlActivity.class);
                                 startActivity(i);
+                                finish();
                             }
+                            else{
+                                Toast.makeText(AdminInsertActivity.this, "insert fail", Toast.LENGTH_LONG).show();
 
+                            }
 
                         }
                         catch (Exception e){}

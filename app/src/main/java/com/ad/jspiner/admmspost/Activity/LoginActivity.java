@@ -81,7 +81,7 @@ public class LoginActivity extends Activity {
                             loginComplete();
                         }
                         else{
-
+                            Toast.makeText(LoginActivity.this,"LOGIN FAIL",Toast.LENGTH_LONG ).show();
                         }
                     }
                 },
