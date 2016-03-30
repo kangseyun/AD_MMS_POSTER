@@ -4,16 +4,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +27,6 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,7 +47,8 @@ public class AdminControlActivity extends Activity implements AbsListView.OnScro
 
     private MenuAdapter mAdapter = null;
 
-    @Bind(R.id.adminList) ListView list;
+    @Bind(R.id.adminList)
+    ListView list;
 
 
     @Override
@@ -63,7 +58,8 @@ public class AdminControlActivity extends Activity implements AbsListView.OnScro
         init();
         road(1);
     }
-    void init(){
+
+    void init() {
         ButterKnife.bind(this);
         mAdapter = new MenuAdapter(getApplicationContext());
         list.setAdapter(mAdapter);
@@ -71,6 +67,7 @@ public class AdminControlActivity extends Activity implements AbsListView.OnScro
 
         list.setOnScrollListener(this);
     }
+
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
 
@@ -78,19 +75,19 @@ public class AdminControlActivity extends Activity implements AbsListView.OnScro
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if(rock == false){
-            if((firstVisibleItem + visibleItemCount) == totalItemCount){
+        if (rock == false) {
+            if ((firstVisibleItem + visibleItemCount) == totalItemCount) {
                 rock = true;
                 road(nowPage);
             }
         }
     }
 
-    private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener(){
+    private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             no = ((TextView) view.findViewById(R.id.listview_user_number)).getText().toString();
-            Log.i("get",no);
+            Log.i("get", no);
             AlertDialog.Builder alert_confirm = new AlertDialog.Builder(AdminControlActivity.this);
             alert_confirm.setMessage("유저를 활서화/비활성화 하시겠습니까?").setCancelable(false).setPositiveButton("확인",
                     new DialogInterface.OnClickListener() {
@@ -113,8 +110,8 @@ public class AdminControlActivity extends Activity implements AbsListView.OnScro
         }
     };
 
-    void road(int page){
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, String.format("http://qwebmomo.cafe24.com/api/load_adminlist.php?page=%d",page),
+    void road(int page) {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, String.format("http://qwebmomo.cafe24.com/api/load_adminlist.php?page=%d", page),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -122,13 +119,13 @@ public class AdminControlActivity extends Activity implements AbsListView.OnScro
                             nowPage = nowPage + 1;
                             JSONObject totalpage = new JSONObject(response);
                             int Count = totalpage.getInt("lastpage");
-                            if(nowPage < Count){
+                            if (nowPage < Count) {
 
                                 Log.i("nowPage", "" + nowPage);
                                 JSONArray result = new JSONObject(response).getJSONArray("adminlist");
                                 int len = result.length();
 
-                                for(int i=0; i<len;i++){
+                                for (int i = 0; i < len; i++) {
                                     JSONObject obj = result.getJSONObject(i);
                                     mAdapter.Additem(new MenuModel(obj.getString("no"), obj.getString("name"), obj.getString("signdate"), obj.getString("id"), obj.getString("is_active")));
 
@@ -139,8 +136,8 @@ public class AdminControlActivity extends Activity implements AbsListView.OnScro
                             }
 
 
+                        } catch (Exception e) {
                         }
-                        catch (Exception e){}
 
                     }
                 },
@@ -149,14 +146,14 @@ public class AdminControlActivity extends Activity implements AbsListView.OnScro
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(AdminControlActivity.this, error.toString(), Toast.LENGTH_LONG).show();
                     }
-                }){
+                }) {
         };
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
 
-    void load2(){
+    void load2() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, API_URL2,
                 new Response.Listener<String>() {
                     @Override
@@ -164,8 +161,8 @@ public class AdminControlActivity extends Activity implements AbsListView.OnScro
                         try {
                             nowPage = 1;
                             road(nowPage);
+                        } catch (Exception e) {
                         }
-                        catch (Exception e){}
 
                     }
                 },
@@ -174,11 +171,11 @@ public class AdminControlActivity extends Activity implements AbsListView.OnScro
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(AdminControlActivity.this, error.toString(), Toast.LENGTH_LONG).show();
                     }
-                }){
+                }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> map = new HashMap<String,String>();
-                map.put("admin_no",no);
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("admin_no", no);
                 return map;
             }
         };
@@ -187,13 +184,11 @@ public class AdminControlActivity extends Activity implements AbsListView.OnScro
     }
 
     @OnClick(R.id.admin_control_btn)
-    void admin_control_btn(){
+    void admin_control_btn() {
         Intent i = new Intent(AdminControlActivity.this, AdminInsertActivity.class);
         startActivity(i);
         finish();
     }
-
-
 
 
 }

@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 
 import com.ad.jspiner.admmspost.Models.LoginModel;
-import com.ad.jspiner.admmspost.Models.MenuModel;
 import com.ad.jspiner.admmspost.R;
 
 import butterknife.Bind;
@@ -15,11 +14,15 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MenuActivity extends AppCompatActivity {
-    @Bind(R.id.btn_menu_uesr) Button btn_user;
-    @Bind(R.id.logout) Button logout;
-    @Bind(R.id.btn_menu_admin) Button btn_admin;
+    @Bind(R.id.btn_menu_uesr)
+    Button btn_user;
+    @Bind(R.id.logout)
+    Button logout;
+    @Bind(R.id.btn_menu_admin)
+    Button btn_admin;
 
     public static LoginModel loginModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,28 +32,28 @@ public class MenuActivity extends AppCompatActivity {
 
     }
 
-    void init(){
+    void init() {
         ButterKnife.bind(this);
 
-        if(loginModel.is_master == 0){
+        if (loginModel.is_master == 0) {
             btn_admin.setVisibility(View.GONE);
         }
     }
 
     @OnClick(R.id.btn_menu_uesr)
-    void UserButtonClick(){
+    void UserButtonClick() {
         Intent i = new Intent(MenuActivity.this, UserControlActivity.class);
         startActivity(i);
     }
 
     @OnClick(R.id.btn_menu_admin)
-    void AdminButtonClick(){
+    void AdminButtonClick() {
         Intent i = new Intent(MenuActivity.this, AdminControlActivity.class);
         startActivity(i);
     }
 
     @OnClick(R.id.logout)
-    void logout(){
+    void logout() {
         Intent i = new Intent(MenuActivity.this, LoginActivity.class);
         startActivity(i);
     }

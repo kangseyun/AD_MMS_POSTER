@@ -4,10 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -46,24 +43,25 @@ public class UserControlActivity extends AppCompatActivity {
 
     public static final String API_URL2 = "http://qwebmomo.cafe24.com/api/set_userable.php";
 
-    public static String no= null;
-    @Bind(R.id.user_control_btn) Button btn;
+    public static String no = null;
+    @Bind(R.id.user_control_btn)
+    Button btn;
     public ListView list;
     private MenuAdapter mAdapter = null;
-
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_control);
-        Log.i("no",""+loginmodel.no);
+        Log.i("no", "" + loginmodel.no);
         init();
         load(nowPage);
     }
-    void init(){
+
+    void init() {
         ButterKnife.bind(this);
-        list = (ListView)findViewById(R.id.userList);
+        list = (ListView) findViewById(R.id.userList);
         mAdapter = new MenuAdapter(getApplicationContext());
         list.setAdapter(mAdapter);
         list.setOnItemClickListener(itemClickListener);
@@ -71,7 +69,8 @@ public class UserControlActivity extends AppCompatActivity {
 
 
     }
-    private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener(){
+
+    private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -96,22 +95,23 @@ public class UserControlActivity extends AppCompatActivity {
             alert.show();
         }
     };
-    void load(int page){
-        StringRequest stringRequest = new StringRequest(Request.Method.GET,  String.format( "http://qwebmomo.cafe24.com/api/load_userlist.php?admin_no=%d&page=%d", loginmodel.no, page),
+
+    void load(int page) {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, String.format("http://qwebmomo.cafe24.com/api/load_userlist.php?admin_no=%d&page=%d", loginmodel.no, page),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
                             JSONArray result = new JSONObject(response).getJSONArray("userlist");
-                            for(int i=0; i<result.length();i++){
+                            for (int i = 0; i < result.length(); i++) {
                                 JSONObject obj = result.getJSONObject(i);
                                 Log.i(TAG, obj.toString());
                                 mAdapter.Additem(new MenuModel(obj.getString("no"), obj.getString("name"), obj.getString("signdate"), obj.getString("id"), obj.getString("is_active")));
                                 mAdapter.notifyDataSetChanged();
                             }
 
+                        } catch (Exception e) {
                         }
-                        catch (Exception e){}
 
                     }
                 },
@@ -120,14 +120,14 @@ public class UserControlActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(UserControlActivity.this, error.toString(), Toast.LENGTH_LONG).show();
                     }
-                }){
+                }) {
         };
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
 
-    void load2(){
+    void load2() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, API_URL2,
                 new Response.Listener<String>() {
                     @Override
@@ -135,9 +135,9 @@ public class UserControlActivity extends AppCompatActivity {
                         try {
                             nowPage = 1;
                             load(nowPage);
-                            Log.i(TAG,response);
+                            Log.i(TAG, response);
+                        } catch (Exception e) {
                         }
-                        catch (Exception e){}
 
                     }
                 },
@@ -146,11 +146,11 @@ public class UserControlActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(UserControlActivity.this, error.toString(), Toast.LENGTH_LONG).show();
                     }
-                }){
+                }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> map = new HashMap<String,String>();
-                map.put("user_no",no);
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("user_no", no);
                 return map;
             }
         };
@@ -158,15 +158,17 @@ public class UserControlActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
+
     @OnClick(R.id.user_control_btn)
-    void user_control_btn(){
+    void user_control_btn() {
         Intent i = new Intent(UserControlActivity.this, UserInsertActivity.class);
         startActivity(i);
         finish();
     }
+
     @OnClick(R.id.user_control_btn_load)
-    void user_control_btn_load(){
-        nowPage= nowPage + 1;
+    void user_control_btn_load() {
+        nowPage = nowPage + 1;
         load(nowPage);
     }
 

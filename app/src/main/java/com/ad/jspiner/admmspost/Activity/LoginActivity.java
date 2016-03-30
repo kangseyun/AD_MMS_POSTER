@@ -32,16 +32,19 @@ public class LoginActivity extends Activity {
     public static final String TAG = LoginActivity.class.getSimpleName();
     public static final String API_URL = "http://qwebmomo.cafe24.com/api/login_admin.php";
 
-    public static final String KEY_USERNAME="id";
-    public static final String KEY_PASSWORD="pw";
+    public static final String KEY_USERNAME = "id";
+    public static final String KEY_PASSWORD = "pw";
 
     public LoginModel loginmodel;
     private String username;
     private String password;
 
-    @Bind(R.id.ButtonLogin) Button login;
-    @Bind(R.id.loginid) EditText id;
-    @Bind(R.id.loginpassword) EditText pw;
+    @Bind(R.id.ButtonLogin)
+    Button login;
+    @Bind(R.id.loginid)
+    EditText id;
+    @Bind(R.id.loginpassword)
+    EditText pw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,14 +54,14 @@ public class LoginActivity extends Activity {
         init();
     }
 
-    void init(){
+    void init() {
         ButterKnife.bind(this);
     }
 
     @OnClick(R.id.ButtonLogin)
-    void ButtonClick(){
-         username = id.getText().toString().trim();
-         password = pw.getText().toString().trim();
+    void ButtonClick() {
+        username = id.getText().toString().trim();
+        password = pw.getText().toString().trim();
         // Login Request
         // 이거 클래스화 시켜야하는데 일단 이렇게 해놓고 나중에 리팩토링할때 클래스 화 할게 그럼 코드 깔끔해질거야
 
@@ -70,32 +73,31 @@ public class LoginActivity extends Activity {
                             JSONObject result = new JSONObject(response);
 
                             loginmodel.logined = result.getInt("code");
-                            loginmodel.is_master =  result.getInt("is_master");
+                            loginmodel.is_master = result.getInt("is_master");
                             loginmodel.no = result.getInt("no");
-                            Log.i(TAG,""+ loginmodel.no);
+                            Log.i(TAG, "" + loginmodel.no);
 
+                        } catch (Exception e) {
                         }
-                        catch (Exception e){}
 
-                        if(loginmodel.logined == 1){
+                        if (loginmodel.logined == 1) {
                             loginComplete();
-                        }
-                        else{
-                            Toast.makeText(LoginActivity.this,"LOGIN FAIL",Toast.LENGTH_LONG ).show();
+                        } else {
+                            Toast.makeText(LoginActivity.this, "LOGIN FAIL", Toast.LENGTH_LONG).show();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(LoginActivity.this,error.toString(),Toast.LENGTH_LONG ).show();
+                        Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_LONG).show();
                     }
-                }){
+                }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> map = new HashMap<String,String>();
-                map.put(KEY_USERNAME,username);
-                map.put(KEY_PASSWORD,password);
+                Map<String, String> map = new HashMap<String, String>();
+                map.put(KEY_USERNAME, username);
+                map.put(KEY_PASSWORD, password);
                 return map;
             }
         };
@@ -105,12 +107,11 @@ public class LoginActivity extends Activity {
 
     }
 
-    private void loginComplete(){
+    private void loginComplete() {
         Intent intent = new Intent(this, MenuActivity.class);
         startActivity(intent);
         finish();
     }
-
 
 
 }

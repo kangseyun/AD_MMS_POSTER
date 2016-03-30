@@ -5,14 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-
-
 import com.ad.jspiner.admmspost.Activity.LoginActivity;
 
 
 public class MainActivity extends Activity {
     private Handler mHandler;
     private Runnable mRunnable;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,7 +20,7 @@ public class MainActivity extends Activity {
             @Override
             public void run() {
                 Intent intent = new Intent(getApplicationContext()
-                        ,LoginActivity.class);
+                        , LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -30,6 +29,7 @@ public class MainActivity extends Activity {
         mHandler = new Handler();
         mHandler.postDelayed(mRunnable, 2000);
     }
+
     @Override
     protected void onDestroy() {
         mHandler.removeCallbacks(mRunnable);
