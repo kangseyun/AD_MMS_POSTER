@@ -38,7 +38,7 @@ import butterknife.OnClick;
 public class AdminControlActivity extends Activity implements AbsListView.OnScrollListener {
     public boolean rock = true;
     public int nowPage = 1;
-    public int check = 0;
+
     public static final String TAG = AdminControlActivity.class.getSimpleName();
     public static final String API_URL2 = "http://qwebmomo.cafe24.com/api/set_adminable.php";
 
@@ -56,7 +56,7 @@ public class AdminControlActivity extends Activity implements AbsListView.OnScro
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_control);
         init();
-        road(1);
+        road();
     }
 
     void init() {
@@ -64,7 +64,14 @@ public class AdminControlActivity extends Activity implements AbsListView.OnScro
         mAdapter = new MenuAdapter(getApplicationContext());
         list.setAdapter(mAdapter);
         list.setOnItemClickListener(itemClickListener);
-
+        /*
+        * Listview 동작방법
+        * 0. 리스트 스크롤 함수 락검 (데이터보다 스크롤 함수가 먼저 동작해서 생기는 버그때문에 락걸어서 요총 -> 리스트뷰 셋팅으로 해결)
+        * 1. 볼리 라이브러리로 요청보내서 데이터 받아옴
+        * 2. 리스트뷰 아이템 셋팅
+        * 3. 락 해제
+        *
+        * */
         list.setOnScrollListener(this);
     }
 
@@ -75,11 +82,9 @@ public class AdminControlActivity extends Activity implements AbsListView.OnScro
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (rock == false) {
-            if ((firstVisibleItem + visibleItemCount) == totalItemCount) {
+            if ((firstVisibleItem + visibleItemCount) == totalItemCount && rock == false) {
                 rock = true;
-                road(nowPage);
-            }
+                road();
         }
     }
 
@@ -110,21 +115,23 @@ public class AdminControlActivity extends Activity implements AbsListView.OnScro
         }
     };
 
-    void road(int page) {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, String.format("http://qwebmomo.cafe24.com/api/load_adminlist.php?page=%d", page),
+    void road() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, String.format("http://qwebmomo.cafe24.com/api/load_adminlist.php?page=%d", nowPage),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            nowPage = nowPage + 1;
+
                             JSONObject totalpage = new JSONObject(response);
                             int Count = totalpage.getInt("lastpage");
-                            if (nowPage < Count) {
+                            Log.i("nowPage", "" + nowPage);
+                            Log.i("nowPageCount",""+Count);
+                            if (nowPage <= Count) {
+                                nowPage = nowPage + 1;
 
-                                Log.i("nowPage", "" + nowPage);
                                 JSONArray result = new JSONObject(response).getJSONArray("adminlist");
                                 int len = result.length();
-
+                                Log.i("len",""+len);
                                 for (int i = 0; i < len; i++) {
                                     JSONObject obj = result.getJSONObject(i);
                                     mAdapter.Additem(new MenuModel(obj.getString("no"), obj.getString("name"), obj.getString("signdate"), obj.getString("id"), obj.getString("is_active")));
@@ -160,7 +167,7 @@ public class AdminControlActivity extends Activity implements AbsListView.OnScro
                     public void onResponse(String response) {
                         try {
                             nowPage = 1;
-                            road(nowPage);
+                            road();
                         } catch (Exception e) {
                         }
 
