@@ -24,10 +24,6 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        WifiInfo w = wifiManager.getConnectionInfo();
-        Log.i("WIFIINFO",w.getSSID());
-
         mRunnable = new Runnable() {
             @Override
             public void run() {
