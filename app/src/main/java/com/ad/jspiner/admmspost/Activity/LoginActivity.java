@@ -1,7 +1,11 @@
 package com.ad.jspiner.admmspost.Activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -36,8 +40,8 @@ public class LoginActivity extends Activity {
     public static final String KEY_PASSWORD = "pw";
 
     public LoginModel loginmodel;
-    private String username;
-    private String password;
+    public String username = null;
+    public String password = null;
 
     @Bind(R.id.ButtonLogin)
     Button login;
@@ -52,6 +56,17 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
 
         init();
+
+
+        SharedPreferences perts = getSharedPreferences("login", MODE_PRIVATE);
+        username = perts.getString("id","");
+        password = perts.getString("pw","");
+        if(password == ""){
+            Log.i("LOGIN","NOT");
+        } else {
+            login();
+        }
+
     }
 
     void init() {
@@ -62,9 +77,18 @@ public class LoginActivity extends Activity {
     void ButtonClick() {
         username = id.getText().toString().trim();
         password = pw.getText().toString().trim();
+
+        SharedPreferences perts = getSharedPreferences("login",MODE_PRIVATE);
+        SharedPreferences.Editor editor = perts.edit();
+        editor.putString("id",username);
+        editor.putString("pw",password);
+        editor.commit();
+        login();
         // Login Request
         // 이거 클래스화 시켜야하는데 일단 이렇게 해놓고 나중에 리팩토링할때 클래스 화 할게 그럼 코드 깔끔해질거야
 
+    }
+    void login() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, API_URL,
                 new Response.Listener<String>() {
                     @Override
@@ -104,7 +128,6 @@ public class LoginActivity extends Activity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
-
     }
 
     private void loginComplete() {

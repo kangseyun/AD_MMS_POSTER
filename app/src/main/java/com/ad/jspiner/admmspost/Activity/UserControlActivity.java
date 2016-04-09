@@ -1,12 +1,16 @@
 package com.ad.jspiner.admmspost.Activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -35,11 +39,11 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class UserControlActivity extends AppCompatActivity {
+public class UserControlActivity extends Activity implements AbsListView.OnScrollListener {
     public int nowPage = 1;
     public static final String TAG = UserInsertActivity.class.getSimpleName();
     public static LoginModel loginmodel;
-
+    public boolean rock = true;
 
     public static final String API_URL2 = "http://qwebmomo.cafe24.com/api/set_userable.php";
 
@@ -54,9 +58,9 @@ public class UserControlActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_control);
-        Log.i("no", "" + loginmodel.no);
         init();
-        load(nowPage);
+        load();
+
     }
 
     void init() {
@@ -64,10 +68,23 @@ public class UserControlActivity extends AppCompatActivity {
         list = (ListView) findViewById(R.id.userList);
         mAdapter = new MenuAdapter(getApplicationContext());
         list.setAdapter(mAdapter);
+
         list.setOnItemClickListener(itemClickListener);
-        mAdapter.notifyDataSetChanged();
+        list.setOnScrollListener(this);
 
+    }
 
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if ((firstVisibleItem + visibleItemCount) == totalItemCount && rock == false) {
+            rock = true;
+            load();
+        }
     }
 
     private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
@@ -96,18 +113,30 @@ public class UserControlActivity extends AppCompatActivity {
         }
     };
 
-    void load(int page) {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, String.format("http://qwebmomo.cafe24.com/api/load_userlist.php?admin_no=%d&page=%d", loginmodel.no, page),
+    void load() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, String.format("http://qwebmomo.cafe24.com/api/load_userlist.php?admin_no=%d&page=%d", loginmodel.no, nowPage),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            JSONArray result = new JSONObject(response).getJSONArray("userlist");
-                            for (int i = 0; i < result.length(); i++) {
-                                JSONObject obj = result.getJSONObject(i);
-                                Log.i(TAG, obj.toString());
-                                mAdapter.Additem(new MenuModel(obj.getString("no"), obj.getString("name"), obj.getString("signdate"), obj.getString("id"), obj.getString("is_active")));
+                            JSONObject totalpage = new JSONObject(response);
+                            int Count = totalpage.getInt("lastpage");
+                            Log.i("nowPage", "" + nowPage);
+                            Log.i("nowPageCount",""+Count);
+                            if (nowPage <= Count) {
+                                nowPage = nowPage + 1;
+
+                                JSONArray result = new JSONObject(response).getJSONArray("userlist");
+                                int len = result.length();
+                                Log.i("len", "" + len);
+                                for (int i = 0; i < len; i++) {
+                                    JSONObject obj = result.getJSONObject(i);
+                                    mAdapter.Additem(new MenuModel(obj.getString("no"), obj.getString("name"), obj.getString("signdate"), obj.getString("id"), obj.getString("is_active")));
+
+
+                                }
                                 mAdapter.notifyDataSetChanged();
+                                rock = false;
                             }
 
                         } catch (Exception e) {
@@ -134,7 +163,7 @@ public class UserControlActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         try {
                             nowPage = 1;
-                            load(nowPage);
+                            load();
                             Log.i(TAG, response);
                         } catch (Exception e) {
                         }
@@ -166,10 +195,6 @@ public class UserControlActivity extends AppCompatActivity {
         finish();
     }
 
-    @OnClick(R.id.user_control_btn_load)
-    void user_control_btn_load() {
-        nowPage = nowPage + 1;
-        load(nowPage);
-    }
+
 
 }

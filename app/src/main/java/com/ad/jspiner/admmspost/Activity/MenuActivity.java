@@ -1,6 +1,7 @@
 package com.ad.jspiner.admmspost.Activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -54,6 +55,11 @@ public class MenuActivity extends AppCompatActivity {
 
     @OnClick(R.id.logout)
     void logout() {
+        SharedPreferences perts = getSharedPreferences("login",MODE_PRIVATE);
+        SharedPreferences.Editor editor = perts.edit();
+        editor.putString("id",null);
+        editor.putString("pw",null);
+        editor.commit();
         Intent i = new Intent(MenuActivity.this, LoginActivity.class);
         startActivity(i);
     }
